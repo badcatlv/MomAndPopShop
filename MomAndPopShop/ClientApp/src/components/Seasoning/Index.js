@@ -9,13 +9,12 @@ const Seasoning = () => {
 
     useEffect(() => {
         fetch('seasoning')
-            .then((results) => results.json())
+            .then((results) => {
+                return results.json();
+            })
             .then(data => {
                 console.log(data);
                 setSeasoning(data);
-            })
-            .catch(error => {
-                console.error('Error fetching seasoning data:', error);
             })
             .finally(() => {
                 setLoading(false);
@@ -27,9 +26,7 @@ const Seasoning = () => {
             <div className="text-center">
                 <h1 className="display-4">Seasoning List</h1>
 
-                {loading && <p>Loading...</p>}
-
-                {seasoning && seasoning.length > 0 && (
+                {seasoning.length > 0 && (
                     <table className="table">
                         <thead>
                             <tr>
@@ -46,20 +43,22 @@ const Seasoning = () => {
                                     <td>{seasoningItem.description}</td>
                                     <td>{seasoningItem.seasoningPrice}</td>
                                     <td>{seasoningItem.quantity}</td>
+                                    <td>
+                                        <Link to={`/seasoning/edit/${seasoningItem.id}`}>Edit</Link>
+                                        {' | '}
+                                        <Link to={`/seasoning/delete/${seasoningItem.id}`}>Delete</Link>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 )}
 
-                {seasoning && seasoning.length === 0 && !loading && (
+                {seasoning.length === 0 && !loading && (
                     <p>No items in inventory yet!</p>
                 )}
 
                 <p><Link to="/seasoning/create">Create Seasoning Item</Link></p>
-                <p><Link to="/seasoning/delete">Delete Seasoning Item</Link></p>
-                <p><Link to="/seasoning/edit">Edit Seasoning Item</Link></p>
-
             </div>
         </main>
     );

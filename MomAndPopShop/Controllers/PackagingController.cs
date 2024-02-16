@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MomAndPopShop.Data;
 using MomAndPopShop.Models;
+using System.Threading.Tasks;
 
 namespace MomAndPopShop.Controllers
 {
@@ -17,10 +18,17 @@ namespace MomAndPopShop.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Index(int id = 0)
         {
-            var packagingList = await _context.Packagings.ToListAsync();
-            return Ok(packagingList);
+            if (id == 0)
+            {
+                return Ok(await _context.Packagings.ToListAsync());
+            }
+            else
+            {
+                return Ok(await _context.Packagings.FindAsync(id));
+            }
         }
 
         [HttpPost("create")]
@@ -37,7 +45,7 @@ namespace MomAndPopShop.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("edit/{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] Packaging packaging)
         {
             if (id != packaging.Id)
@@ -56,7 +64,7 @@ namespace MomAndPopShop.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var thePackaging = await _context.Packagings.FindAsync(id);
