@@ -1,28 +1,18 @@
+using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using MomAndPopShop;
 using MomAndPopShop.Data;
 using MomAndPopShop.Models;
 using MomAndPopShop.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
 using SendGrid.Extensions.DependencyInjection;
 using Stripe;
-using Duende.IdentityServer.Services;
-
-
-StripeConfiguration.ApiKey = "sk_test_51OiOb1A8iioFBT6WORuFIleOIpw8W3IJjPEhyoZDfjVq90Ro2HJ6NgKWwOvFwDPbKFc2EMl6JJvrWW7oZrWMl263002z9z0wre";
-
 
 
 var builder = WebApplication.CreateBuilder(args);
+StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("StripeKey");
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -59,7 +49,8 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
-builder.Services.AddSendGrid(options => {
+builder.Services.AddSendGrid(options =>
+{
     options.ApiKey = builder.Configuration.GetValue<string>("SendGridKey");
 });
 
@@ -92,16 +83,16 @@ app.MapControllerRoute(
     pattern: "{controller=ProductHome}/{action=GetProductHome}/{id?}");
 app.MapRazorPages();
 
-app.MapFallbackToFile("index.html"); 
+app.MapFallbackToFile("index.html");
 
-using(var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var roles = new[] { "Admin", "Manager", "User" };
 
-    foreach(var role in roles)
+    foreach (var role in roles)
     {
-        if(!await roleManager.RoleExistsAsync(role))
+        if (!await roleManager.RoleExistsAsync(role))
         {
             await roleManager.CreateAsync(new IdentityRole(role));
         }
@@ -115,7 +106,7 @@ using (var scope = app.Services.CreateScope())
     string email = "mom.and.popcorn.shop@gmail.com";
     string password = "Admin@123";
 
-    if(await userManager.FindByEmailAsync(email) == null)
+    if (await userManager.FindByEmailAsync(email) == null)
     {
         var user = new ApplicationUser();
         user.UserName = email;
