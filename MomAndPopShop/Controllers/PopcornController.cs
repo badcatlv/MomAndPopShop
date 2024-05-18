@@ -84,6 +84,8 @@ namespace MomAndPopShop.Controllers
             }
         }
 
+
+        //need to create a span html to seclect the seasoning
         public async Task<IActionResult> AddSeasoning(int popcornId, int seasoningId)
         {
             var popcorn = await _context.Popcorns.FindAsync(popcornId);
