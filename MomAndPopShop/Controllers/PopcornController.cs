@@ -83,5 +83,43 @@ namespace MomAndPopShop.Controllers
                 return NotFound();
             }
         }
+
+        public async Task<IActionResult> AddSeasoning(int popcornId, int seasoningId)
+        {
+            var popcorn = await _context.Popcorns.FindAsync(popcornId);
+            var seasoning = await _context.Seasonings.FindAsync(seasoningId);
+
+            if (popcorn == null || seasoning == null)
+            {
+                return NotFound();
+            }
+
+            popcorn.PopcornSeasonings.Add(seasoning);
+            await _context.SaveChangesAsync();
+
+            return Ok(popcorn);
+        }
+        public async Task<IActionResult> RemoveSeasoning(int popcornId, int seasoningId)
+        {
+            var popcorn = await _context.Popcorns.FindAsync(popcornId);
+            var seasoning = await _context.Seasonings.FindAsync(seasoningId);
+
+            if (popcorn == null || seasoning == null)
+            {
+                return NotFound();
+            }
+
+            popcorn.PopcornSeasonings.Remove(seasoning);
+            await _context.SaveChangesAsync();
+
+            return Ok(popcorn);
+        }
+        public IActionResult Detail(int id)
+        {
+            Popcorn popcorn = _context.Popcorns
+                .Include(j => j.PopcornSeasonings)
+                .Single(Single => Single.Id == id);
+            return Ok(popcorn);
+        }
     }
 }

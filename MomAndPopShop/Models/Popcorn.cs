@@ -29,7 +29,7 @@ namespace MomAndPopShop.Models
         public int? Quantity { get; set; }
 
 
-        public ICollection<Seasoning> PopcornSeasonings { get; set; }
+        public ICollection<Seasoning>? PopcornSeasonings { get; set; }
 
         /*This is the SKU addition for stripe product connection*/
         public string? StripeSku { get; set; } = "";
