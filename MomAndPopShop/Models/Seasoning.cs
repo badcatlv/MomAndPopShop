@@ -28,6 +28,8 @@ namespace MomAndPopShop.Models
         [Range(0.01, int.MaxValue, ErrorMessage = "Quantity must be 1 or greater.")]
         public int? Quantity { get; set; }
 
+        public ICollection<Popcorn> Popcorns { get; set; }
+
 
         public Seasoning() { }
 
@@ -37,6 +39,7 @@ namespace MomAndPopShop.Models
             Description = description;
             SeasoningPrice = seasoningPrice;
             Quantity = 0;
+            Popcorns = new List<Popcorn>();
         }
 
     }

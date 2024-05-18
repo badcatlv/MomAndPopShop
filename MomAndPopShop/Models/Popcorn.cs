@@ -29,6 +29,8 @@ namespace MomAndPopShop.Models
         public int? Quantity { get; set; }
 
 
+        public ICollection<Seasoning> PopcornSeasonings { get; set; }
+
         /*This is the SKU addition for stripe product connection*/
         public string? StripeSku { get; set; } = "";
 
@@ -39,6 +41,7 @@ namespace MomAndPopShop.Models
             PopcornPrice = popcornPrice;
             Quantity = 0;
             StripeSku = stripeSku;
+            PopcornSeasonings = new List<Seasoning>();
         }
         public Popcorn() { }
 
