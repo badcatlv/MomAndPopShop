@@ -27,6 +27,10 @@ namespace MomAndPopShop.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Popcorn>()
+                .HasMany(p => p.Seasonings)
+                .WithMany(s => s.Popcorns)
+                .UsingEntity(j => j.ToTable("PopcornSeasonings"));
             /*builder.Entity<CartItem>()
                 .HasOne(e => e.PopcornItem);
 
